@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Articles — CapitalBrief</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --serif: 'Playfair Display', serif;
+      --sans: 'DM Sans', sans-serif;
+      --accent: #1a6b3a;
+      --accent-light: #e6f4ed;
+      --ink: #1a1a18;
+      --muted: #6b6b67;
+      --bg: #ffffff;
+      --bg2: #f7f6f2;
+      --border: rgba(0,0,0,0.10);
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --ink: #e8e6df;
+        --muted: #9c9a92;
+        --bg: #1a1a18;
+        --bg2: #242420;
+        --border: rgba(255,255,255,0.10);
+        --accent-light: #0f2d1c;
+      }
+    }
+
+    body { font-family: var(--sans); background: var(--bg); color: var(--ink); min-height: 100vh; }
+
+    /* NAV */
+    nav {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 14px 40px; border-bottom: 0.5px solid var(--border);
+      position: sticky; top: 0; background: var(--bg); z-index: 100;
+    }
+    .nav-logo { font-family: var(--serif); font-size: 20px; font-weight: 700; letter-spacing: -.4px; text-decoration: none; color: var(--ink); }
+    .nav-logo span { color: var(--accent); }
+    .nav-links { display: flex; gap: 24px; list-style: none; }
+    .nav-links a { font-size: 13px; font-weight: 500; color: var(--muted); text-decoration: none; transition: color .15s; }
+    .nav-links a:hover, .nav-links a.active { color: var(--ink); }
+    .nav-cta {
+      background: var(--accent); color: #fff; font-size: 12px; font-weight: 500;
+      padding: 7px 16px; border-radius: 6px; cursor: pointer; border: none;
+      font-family: var(--sans); text-decoration: none;
+    }
+
+    /* PAGE HEADER */
+    .page-header {
+      padding: 52px 40px 36px;
+      border-bottom: 0.5px solid var(--border);
+      max-width: 1100px; margin: 0 auto;
+    }
+    .page-eyebrow { font-size: 11px; font-weight: 500; letter-spacing: 1.2px; text-transform: uppercase; color: var(--accent); margin-bottom: 12px; }
+    .page-title { font-family: var(--serif); font-size: 40px; font-weight: 900; letter-spacing: -.5px; margin-bottom: 12px; }
+    .page-sub { font-size: 15px; color: var(--muted); line-height: 1.6; max-width: 520px; }
+
+    /* FILTERS */
+    .filters-bar {
+      padding: 24px 40px;
+      border-bottom: 0.5px solid var(--border);
+      display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+    }
+    .filter-label { font-size: 12px; font-weight: 500; color: var(--muted); margin-right: 4px; text-transform: uppercase; letter-spacing: .8px; }
+    .filter-pill {
+      padding: 6px 16px; border: 0.5px solid var(--border); border-radius: 24px;
+      font-size: 12px; font-weight: 500; cursor: pointer; background: transparent;
+      color: var(--ink); font-family: var(--sans); transition: all .15s;
+    }
+    .filter-pill:hover { border-color: var(--accent); color: var(--accent); }
+    .filter-pill.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+
+    /* ARTICLES GRID */
+    .articles-wrap { max-width: 1100px; margin: 0 auto; padding: 40px 40px 80px; }
+    .articles-count { font-size: 13px; color: var(--muted); margin-bottom: 24px; }
+    .articles-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+
+    @media (max-width: 900px) { .articles-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 600px) { .articles-grid { grid-template-columns: 1fr; } nav { padding: 14px 20px; } .page-header, .filters-bar, .articles-wrap { padding-left: 20px; padding-right: 20px; } }
+
+    /* ARTICLE CARD */
+    .art-card {
+      border: 0.5px solid var(--border); border-radius: 12px; overflow: hidden;
+      cursor: pointer; transition: all .2s; display: flex; flex-direction: column;
+      text-decoration: none; color: inherit;
+    }
+    .art-card:hover { border-color: rgba(26,107,58,0.4); transform: translateY(-2px); }
+    .art-card-accent {
+      height: 6px;
+    }
+    .cat-stocks    { background: #1a6b3a; }
+    .cat-macro     { background: #1a4a6b; }
+    .cat-basics    { background: #6b4a1a; }
+    .cat-casestudy { background: #5a1a6b; }
+    .cat-etfs      { background: #1a6b60; }
+
+    .art-card-body { padding: 20px; flex: 1; display: flex; flex-direction: column; }
+    .art-cat {
+      font-size: 10px; font-weight: 500; letter-spacing: .8px; text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+    .cat-label-stocks    { color: #1a6b3a; }
+    .cat-label-macro     { color: #1a4a6b; }
+    .cat-label-basics    { color: #6b4a1a; }
+    .cat-label-casestudy { color: #5a1a6b; }
+    .cat-label-etfs      { color: #1a6b60; }
+
+    .art-title { font-family: var(--serif); font-size: 17px; font-weight: 700; line-height: 1.35; margin-bottom: 10px; }
+    .art-excerpt { font-size: 13px; line-height: 1.65; color: var(--muted); flex: 1; margin-bottom: 16px; }
+    .art-footer { display: flex; justify-content: space-between; align-items: center; font-size: 11px; color: var(--muted); border-top: 0.5px solid var(--border); padding-top: 14px; }
+    .art-read { font-size: 11px; font-weight: 500; color: var(--accent); }
+
+    /* FEATURED (first card spans 2 cols) */
+    .art-card.featured { grid-column: span 2; flex-direction: row; }
+    .art-card.featured .art-card-accent { width: 6px; height: auto; flex-shrink: 0; }
+    .art-card.featured .art-card-body { padding: 28px; }
+    .art-card.featured .art-title { font-size: 22px; }
+    .art-card.featured .art-excerpt { font-size: 14px; }
+    @media (max-width: 900px) { .art-card.featured { grid-column: span 1; flex-direction: column; } .art-card.featured .art-card-accent { width: auto; height: 6px; } }
+
+    /* EMPTY STATE */
+    .empty { grid-column: 1/-1; text-align: center; padding: 60px 20px; color: var(--muted); font-size: 15px; }
+
+    /* FOOTER */
+    footer {
+      border-top: 0.5px solid var(--border); padding: 20px 40px;
+      display: flex; justify-content: space-between; align-items: center;
+      font-size: 12px; color: var(--muted);
+    }
+    .footer-logo { font-family: var(--serif); font-size: 15px; font-weight: 700; }
+    .footer-logo span { color: var(--accent); }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a href="index.html" class="nav-logo">Capital<span>Brief</span></a>
+    <ul class="nav-links">
+      <li><a href="articles.html" class="active">Articles</a></li>
+      <li><a href="learn.html">Learn</a></li>
+      <li><a href="picks.html">Picks</a></li>
+      <li><a href="about.html">About</a></li>
+    </ul>
+    <a href="#newsletter" class="nav-cta">Subscribe — Free</a>
+  </nav>
+
+  <div class="page-header">
+    <div class="page-eyebrow">Research & Analysis</div>
+    <div class="page-title">All Articles</div>
+    <div class="page-sub">Every piece I've published — stocks, macro trends, investment fundamentals, and case studies.</div>
+  </div>
+
+  <div class="filters-bar">
+    <span class="filter-label">Filter:</span>
+    <button class="filter-pill active" data-filter="all">All</button>
+    <button class="filter-pill" data-filter="stocks">Stocks</button>
+    <button class="filter-pill" data-filter="macro">Macro</button>
+    <button class="filter-pill" data-filter="basics">Investment Basics</button>
+    <button class="filter-pill" data-filter="casestudy">Case Studies</button>
+    <button class="filter-pill" data-filter="etfs">ETFs</button>
+  </div>
+
+  <div class="articles-wrap">
+    <div class="articles-count" id="count">Showing all articles</div>
+    <div class="articles-grid" id="grid">
+
+      <!-- ============================================================
+           HOW TO ADD YOUR ARTICLES:
+           1. Copy one of the <a class="art-card"> blocks below
+           2. Change data-category to: stocks / macro / basics / casestudy / etfs
+           3. Update the cat-* classes to match your category
+           4. Fill in title, excerpt, date, read time
+           5. Set href to your article file, e.g. href="articles/my-article.html"
+           The first card has class="featured" — make that your best piece.
+      ================================================================ -->
+
+      <!-- FEATURED ARTICLE -->
+      <a class="art-card featured" data-category="macro" href="article-template.html">
+        <div class="art-card-accent cat-macro"></div>
+        <div class="art-card-body">
+          <div class="art-cat cat-label-macro">Macro · Oil Markets</div>
+          <div class="art-title">Iran's Strait of Hormuz gamble and what it means for oil prices in 2025</div>
+          <div class="art-excerpt">With tensions escalating in the Persian Gulf, approximately 20% of global oil supply hangs in the balance. A breakdown of the supply shock scenarios, historical precedents from the 1973 and 1979 crises, and how investors can position across energy, defence, and safe-haven assets.</div>
+          <div class="art-footer">
+            <span>Mar 10, 2026 · 6 min read</span>
+            <span class="art-read">Read article →</span>
+          </div>
+        </div>
+      </a>
+
+      <!-- ARTICLE 2 -->
+      <a class="art-card" data-category="stocks" href="article-template.html">
+        <div class="art-card-accent cat-stocks"></div>
+        <div class="art-card-body">
+          <div class="art-cat cat-label-stocks">Stocks</div>
+          <div class="art-title">NVIDIA's AI moat: how long can it hold before AMD catches up?</div>
+          <div class="art-excerpt">A deep look at NVDA's H100 dominance, margin compression risks, and whether the premium is justified at current valuations.</div>
+          <div class="art-footer">
+            <span>Feb 24, 2026 · 5 min read</span>
+            <span class="art-read">Read →</span>
+          </div>
+        </div>
+      </a>
+
+      <!-- ARTICLE 3 -->
+      <a class="art-card" data-category="macro" href="article-template.html">
+        <div class="art-card-accent cat-macro"></div>
+        <div class="art-card-body">
+          <div class="art-cat cat-label-macro">Macro</div>
+          <div class="art-title">What the Fed's "higher for longer" means for your equity allocations</div>
+          <div class="art-excerpt">Rate-sensitive sectors are repricing. A framework for thinking through duration risk in a 4%+ yield environment.</div>
+          <div class="art-footer">
+            <span>Feb 10, 2026 · 7 min read</span>
+            <span class="art-read">Read →</span>
+          </div>
+        </div>
+      </a>
+
+      <!-- ARTICLE 4 -->
+      <a class="art-card" data-category="casestudy" href="article-template.html">
+        <div class="art-card-accent cat-casestudy"></div>
+        <div class="art-card-body">
+          <div class="art-cat cat-label-casestudy">Case Study</div>
+          <div class="art-title">How Berkshire quietly built a $15B position in Occidental Petroleum</div>
+          <div class="art-excerpt">Breaking down Buffett's thesis, the timing of each purchase, and what it signals about macro bets on energy and inflation hedges.</div>
+          <div class="art-footer">
+            <span>Jan 27, 2026 · 8 min read</span>
+            <span class="art-read">Read →</span>
+          </div>
+        </div>
+      </a>
+
+      <!-- ARTICLE 5 — replace with your real article -->
+      <a class="art-card" data-category="basics" href="article-template.html">
+        <div class="art-card-accent cat-basics"></div>
+        <div class="art-card-body">
+          <div class="art-cat cat-label-basics">Investment Basics</div>
+          <div class="art-title">Your article title here</div>
+          <div class="art-excerpt">Replace this with your article excerpt — 2-3 sentences summarising what the reader will learn.</div>
+          <div class="art-footer">
+            <span>Jan 2026 · X min read</span>
+            <span class="art-read">Read →</span>
+          </div>
+        </div>
+      </a>
+
+    </div>
+  </div>
+
+  <footer>
+    <span class="footer-logo">Capital<span>Brief</span></span>
+    <span>Published biweekly · © 2026</span>
+    <div style="display:flex;gap:16px">
+      <a href="articles.html" style="color:inherit;text-decoration:none">Articles</a>
+      <a href="learn.html" style="color:inherit;text-decoration:none">Learn</a>
+      <a href="about.html" style="color:inherit;text-decoration:none">About</a>
+    </div>
+  </footer>
+
+  <script>
+    const pills = document.querySelectorAll('.filter-pill');
+    const cards = document.querySelectorAll('.art-card');
+    const countEl = document.getElementById('count');
+
+    pills.forEach(pill => {
+      pill.addEventListener('click', () => {
+        pills.forEach(p => p.classList.remove('active'));
+        pill.classList.add('active');
+
+        const filter = pill.dataset.filter;
+        let visible = 0;
+        let isFirst = true;
+
+        cards.forEach(card => {
+          const show = filter === 'all' || card.dataset.category === filter;
+          card.style.display = show ? '' : 'none';
+          if (show) {
+            visible++;
+            // Only first visible card gets featured treatment
+            if (isFirst && filter === 'all') {
+              card.classList.add('featured');
+              isFirst = false;
+            } else {
+              card.classList.remove('featured');
+            }
+          }
+        });
+
+        countEl.textContent = filter === 'all'
+          ? `Showing all ${visible} articles`
+          : `Showing ${visible} article${visible !== 1 ? 's' : ''} in ${pill.textContent}`;
+      });
+    });
+  </script>
+
+</body>
+</html>

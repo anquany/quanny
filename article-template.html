@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- REPLACE THIS: Update title for each article -->
+  <title>Article Title — CapitalBrief</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --serif: 'Playfair Display', serif;
+      --sans: 'DM Sans', sans-serif;
+      --accent: #1a6b3a;
+      --accent-light: #e6f4ed;
+      --ink: #1a1a18;
+      --muted: #6b6b67;
+      --bg: #ffffff;
+      --bg2: #f7f6f2;
+      --border: rgba(0,0,0,0.10);
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --ink: #e8e6df;
+        --muted: #9c9a92;
+        --bg: #1a1a18;
+        --bg2: #242420;
+        --border: rgba(255,255,255,0.10);
+        --accent-light: #0f2d1c;
+      }
+    }
+
+    body { font-family: var(--sans); background: var(--bg); color: var(--ink); }
+
+    /* NAV */
+    nav {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 14px 40px; border-bottom: 0.5px solid var(--border);
+      position: sticky; top: 0; background: var(--bg); z-index: 100;
+    }
+    .nav-logo { font-family: var(--serif); font-size: 20px; font-weight: 700; letter-spacing: -.4px; text-decoration: none; color: var(--ink); }
+    .nav-logo span { color: var(--accent); }
+    .nav-links { display: flex; gap: 24px; list-style: none; }
+    .nav-links a { font-size: 13px; font-weight: 500; color: var(--muted); text-decoration: none; transition: color .15s; }
+    .nav-links a:hover { color: var(--ink); }
+    .nav-cta {
+      background: var(--accent); color: #fff; font-size: 12px; font-weight: 500;
+      padding: 7px 16px; border-radius: 6px; cursor: pointer; border: none;
+      font-family: var(--sans); text-decoration: none;
+    }
+
+    /* PROGRESS BAR */
+    #progress {
+      position: fixed; top: 0; left: 0; height: 2px;
+      background: var(--accent); width: 0%; z-index: 200;
+      transition: width .1s linear;
+    }
+
+    /* ARTICLE HEADER */
+    .article-header {
+      max-width: 720px; margin: 0 auto;
+      padding: 56px 40px 40px;
+    }
+    .back-link {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 13px; color: var(--muted); text-decoration: none;
+      margin-bottom: 28px; transition: color .15s;
+    }
+    .back-link:hover { color: var(--ink); }
+    .article-cat {
+      font-size: 11px; font-weight: 500; letter-spacing: 1px;
+      text-transform: uppercase; color: var(--accent); margin-bottom: 16px;
+    }
+    .article-title {
+      font-family: var(--serif); font-size: 40px; font-weight: 900;
+      line-height: 1.15; letter-spacing: -.5px; margin-bottom: 20px;
+    }
+    .article-subtitle {
+      font-size: 18px; line-height: 1.6; color: var(--muted);
+      margin-bottom: 28px; font-weight: 300;
+    }
+    .article-meta {
+      display: flex; align-items: center; gap: 16px;
+      font-size: 13px; color: var(--muted);
+      border-top: 0.5px solid var(--border);
+      border-bottom: 0.5px solid var(--border);
+      padding: 16px 0;
+    }
+    .meta-avatar {
+      width: 32px; height: 32px; border-radius: 50%;
+      background: var(--accent); display: flex; align-items: center;
+      justify-content: center; font-size: 12px; font-weight: 500; color: #fff;
+      flex-shrink: 0;
+    }
+    .meta-dot { color: var(--border); }
+    .meta-tag {
+      background: var(--accent-light); color: var(--accent);
+      font-size: 11px; font-weight: 500; padding: 3px 9px; border-radius: 4px;
+    }
+
+    /* ARTICLE BODY */
+    .article-body {
+      max-width: 720px; margin: 0 auto;
+      padding: 44px 40px 80px;
+    }
+
+    /* Typography */
+    .article-body p { font-size: 17px; line-height: 1.8; color: var(--ink); margin-bottom: 24px; }
+    .article-body h2 { font-family: var(--serif); font-size: 26px; font-weight: 700; line-height: 1.3; margin: 44px 0 16px; }
+    .article-body h3 { font-family: var(--serif); font-size: 20px; font-weight: 700; margin: 32px 0 12px; }
+    .article-body ul, .article-body ol { margin: 0 0 24px 24px; }
+    .article-body li { font-size: 17px; line-height: 1.8; margin-bottom: 8px; }
+    .article-body strong { font-weight: 500; }
+    .article-body em { font-style: italic; }
+    .article-body a { color: var(--accent); text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 3px; }
+
+    /* Pull quote */
+    .article-body blockquote {
+      border-left: 3px solid var(--accent);
+      margin: 36px 0; padding: 4px 0 4px 24px;
+    }
+    .article-body blockquote p {
+      font-family: var(--serif); font-size: 20px; font-style: italic;
+      line-height: 1.6; color: var(--muted); margin: 0;
+    }
+
+    /* Key stats strip */
+    .stats-strip {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;
+      background: var(--bg2); border: 0.5px solid var(--border);
+      border-radius: 12px; padding: 24px; margin: 36px 0;
+    }
+    .stat { text-align: center; }
+    .stat-val { font-family: var(--serif); font-size: 28px; font-weight: 700; color: var(--accent); display: block; }
+    .stat-label { font-size: 12px; color: var(--muted); margin-top: 4px; display: block; }
+
+    /* Callout box */
+    .callout {
+      background: var(--accent-light); border-left: 3px solid var(--accent);
+      border-radius: 0 8px 8px 0; padding: 16px 20px; margin: 32px 0;
+    }
+    .callout-label { font-size: 10px; font-weight: 500; letter-spacing: .8px; text-transform: uppercase; color: var(--accent); margin-bottom: 8px; }
+    .callout p { font-size: 15px; color: var(--ink); margin: 0; }
+
+    /* Article footer */
+    .article-end {
+      max-width: 720px; margin: 0 auto;
+      border-top: 0.5px solid var(--border);
+      padding: 40px 40px 60px;
+    }
+    .share-row { display: flex; align-items: center; gap: 12px; margin-bottom: 40px; }
+    .share-label { font-size: 13px; font-weight: 500; color: var(--muted); }
+    .share-btn {
+      border: 0.5px solid var(--border); border-radius: 6px; padding: 6px 14px;
+      font-size: 12px; font-weight: 500; cursor: pointer; background: transparent;
+      color: var(--ink); font-family: var(--sans); transition: all .15s;
+    }
+    .share-btn:hover { background: var(--bg2); }
+
+    /* Newsletter CTA */
+    .newsletter-cta {
+      background: var(--bg2); border: 0.5px solid var(--border);
+      border-radius: 12px; padding: 32px; text-align: center;
+    }
+    .cta-eyebrow { font-size: 11px; font-weight: 500; letter-spacing: 1px; text-transform: uppercase; color: var(--accent); margin-bottom: 10px; }
+    .cta-headline { font-family: var(--serif); font-size: 22px; font-weight: 700; margin-bottom: 8px; }
+    .cta-sub { font-size: 14px; color: var(--muted); margin-bottom: 20px; }
+    .cta-form { display: flex; gap: 8px; max-width: 360px; margin: 0 auto; }
+    .cta-input {
+      flex: 1; border: 0.5px solid var(--border); border-radius: 7px; padding: 10px 14px;
+      font-size: 14px; background: var(--bg); color: var(--ink); font-family: var(--sans);
+    }
+    .cta-input:focus { outline: none; border-color: var(--accent); }
+    .cta-btn {
+      background: var(--accent); color: #fff; border: none; border-radius: 7px;
+      padding: 10px 18px; font-size: 13px; font-weight: 500; cursor: pointer;
+      font-family: var(--sans); white-space: nowrap;
+    }
+
+    /* Footer */
+    footer {
+      border-top: 0.5px solid var(--border); padding: 20px 40px;
+      display: flex; justify-content: space-between; align-items: center;
+      font-size: 12px; color: var(--muted);
+    }
+    .footer-logo { font-family: var(--serif); font-size: 15px; font-weight: 700; }
+    .footer-logo span { color: var(--accent); }
+
+    @media (max-width: 600px) {
+      nav { padding: 14px 20px; }
+      .article-header, .article-body, .article-end { padding-left: 20px; padding-right: 20px; }
+      .article-title { font-size: 28px; }
+      .stats-strip { grid-template-columns: 1fr; }
+      .cta-form { flex-direction: column; }
+      footer { padding: 16px 20px; flex-direction: column; gap: 10px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div id="progress"></div>
+
+  <nav>
+    <a href="index.html" class="nav-logo">Capital<span>Brief</span></a>
+    <ul class="nav-links">
+      <li><a href="articles.html">Articles</a></li>
+      <li><a href="learn.html">Learn</a></li>
+      <li><a href="picks.html">Picks</a></li>
+      <li><a href="about.html">About</a></li>
+    </ul>
+    <a href="#newsletter" class="nav-cta">Subscribe — Free</a>
+  </nav>
+
+  <!-- ============================================================
+       ARTICLE HEADER — Edit everything below
+  ================================================================ -->
+  <header class="article-header">
+    <a href="articles.html" class="back-link">← Back to all articles</a>
+
+    <!-- REPLACE: Change to your category e.g. Stocks / Macro / Case Study -->
+    <div class="article-cat">Macro · Oil Markets</div>
+
+    <!-- REPLACE: Your article title -->
+    <h1 class="article-title">Iran's Strait of Hormuz gamble and what it means for oil prices in 2025</h1>
+
+    <!-- REPLACE: Your article subtitle / deck (1-2 sentences) -->
+    <p class="article-subtitle">With tensions escalating in the Persian Gulf, approximately 20% of global oil supply hangs in the balance. Here's how to position your portfolio.</p>
+
+    <div class="article-meta">
+      <!-- REPLACE: Your initials -->
+      <div class="meta-avatar">YK</div>
+      <!-- REPLACE: Your name -->
+      <span>Your Name</span>
+      <span class="meta-dot">·</span>
+      <!-- REPLACE: Publish date -->
+      <span>March 10, 2026</span>
+      <span class="meta-dot">·</span>
+      <!-- REPLACE: Read time -->
+      <span>6 min read</span>
+      <span class="meta-dot">·</span>
+      <!-- REPLACE: Your category tag -->
+      <span class="meta-tag">Macro</span>
+    </div>
+  </header>
+
+  <!-- ============================================================
+       ARTICLE BODY — Replace with your actual content.
+       Available components:
+         <p>              — body paragraph
+         <h2>             — section heading
+         <h3>             — sub-heading
+         <blockquote><p>  — pull quote
+         <ul><li>         — bullet list
+         <ol><li>         — numbered list
+         .stats-strip     — 3-stat highlight box (see example below)
+         .callout         — highlighted tip/takeaway box
+  ================================================================ -->
+  <article class="article-body">
+
+    <p>On January 5th, Iranian officials issued a stark warning to the international community: any military action against the Islamic Republic would result in the closure of the Strait of Hormuz. The threat, though not new, lands differently in 2026 — oil markets are tighter, geopolitical risk premiums are elevated, and the spare capacity cushion that once softened shocks has narrowed considerably.</p>
+
+    <p>This piece breaks down what a Hormuz closure would actually mean for markets, what history tells us about how these crises resolve, and where smart money tends to position when the risk premium spikes.</p>
+
+    <!-- Stats strip example — replace numbers with real data from your article -->
+    <div class="stats-strip">
+      <div class="stat">
+        <span class="stat-val">20%</span>
+        <span class="stat-label">of global oil supply transits Hormuz daily</span>
+      </div>
+      <div class="stat">
+        <span class="stat-val">~17M</span>
+        <span class="stat-label">barrels per day at stake</span>
+      </div>
+      <div class="stat">
+        <span class="stat-val">$120+</span>
+        <span class="stat-label">analyst estimate for oil per barrel in closure scenario</span>
+      </div>
+    </div>
+
+    <h2>Why the Strait of Hormuz actually matters</h2>
+
+    <p>The Strait is a 21-mile-wide chokepoint between Oman and Iran connecting the Persian Gulf to the Gulf of Oman — and ultimately to global markets. Every day, roughly 17 million barrels of crude oil and petroleum products pass through it. That's about one in every five barrels traded globally.</p>
+
+    <p>The countries most exposed include Saudi Arabia, Kuwait, the UAE, Iraq, and Qatar. Notably, Qatar routes nearly all of its LNG exports through the Strait too — meaning a closure doesn't just spike crude prices, it hits European natural gas markets at precisely the wrong time.</p>
+
+    <blockquote>
+      <p>"The Strait of Hormuz is the world's most important oil chokepoint by far. There is no realistic alternative for most of that volume."</p>
+    </blockquote>
+
+    <h2>What history tells us</h2>
+
+    <p>Iran has threatened to close Hormuz before — most notably in 2012, 2018, and 2019. In each case, markets spiked on the announcement and then partially retraced as the threat went unexecuted. The 2019 tanker attacks are the closest we've come to a genuine supply disruption: oil jumped ~15% in a single session before settling back.</p>
+
+    <!-- Callout box example -->
+    <div class="callout">
+      <div class="callout-label">Key takeaway</div>
+      <p>Markets historically overreact to Hormuz threats in the short term. The playbook: energy stocks and defense contractors spike fast, then partially retrace over 4–6 weeks as the threat dissipates. The risk this time is that the macro backdrop is far less forgiving than 2019.</p>
+    </div>
+
+    <h2>How to think about positioning</h2>
+
+    <p>There are three broad scenarios worth stress-testing your portfolio against: a full closure (tail risk, low probability), a partial disruption via tanker attacks or mining (medium probability), and continued escalatory rhetoric with no physical disruption (base case).</p>
+
+    <ul>
+      <li><strong>Energy equities</strong> — majors like XOM, CVX, and SLB tend to outperform in genuine supply shocks. Pure-play E&P names are higher beta but also higher risk.</li>
+      <li><strong>Defense</strong> — Raytheon, Lockheed, and Northrop have historically seen elevated multiples during Persian Gulf tensions.</li>
+      <li><strong>Safe havens</strong> — Gold and the USD both strengthened meaningfully during the 2019 tanker attacks. Treasuries are the wildcard given current yield levels.</li>
+      <li><strong>Airlines and transport</strong> — these are the short candidates. Fuel cost exposure hits carriers directly.</li>
+    </ul>
+
+    <h2>Bottom line</h2>
+
+    <p>Iran's threat is credible enough to warrant a higher risk premium in oil markets — but the structural incentives against a full closure remain strong. Iran's own economy depends on oil revenues flowing through the same waterway it threatens to shut. The more likely scenario is targeted harassment of tankers, which creates volatility without a full supply shock.</p>
+
+    <p>That said, the risk-reward for a small energy allocation looks asymmetric here. If the threat dissipates, you give up modest upside. If it escalates, the downside protection is significant. Watch the 10-day implied volatility on crude options — that's your real-time market signal for how seriously traders are pricing the tail risk.</p>
+
+  </article>
+
+  <!-- ARTICLE FOOTER -->
+  <div class="article-end">
+    <div class="share-row">
+      <span class="share-label">Share:</span>
+      <button class="share-btn" onclick="navigator.clipboard.writeText(window.location.href); this.textContent='Copied!'">Copy link</button>
+      <button class="share-btn" onclick="window.open('https://twitter.com/intent/tweet?url='+encodeURIComponent(window.location.href))">Share on X</button>
+    </div>
+
+    <!-- NEWSLETTER SIGNUP -->
+    <div class="newsletter-cta" id="newsletter">
+      <div class="cta-eyebrow">Free Newsletter</div>
+      <div class="cta-headline">Enjoyed this? Get the next issue.</div>
+      <div class="cta-sub">Biweekly analysis on stocks and macro — straight to your inbox. Free, always.</div>
+      <div class="cta-form">
+        <input class="cta-input" type="email" placeholder="your@email.com">
+        <button class="cta-btn">Subscribe</button>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <span class="footer-logo">Capital<span>Brief</span></span>
+    <span>© 2026 CapitalBrief</span>
+    <div style="display:flex;gap:16px">
+      <a href="articles.html" style="color:inherit;text-decoration:none">Articles</a>
+      <a href="learn.html" style="color:inherit;text-decoration:none">Learn</a>
+      <a href="about.html" style="color:inherit;text-decoration:none">About</a>
+    </div>
+  </footer>
+
+  <script>
+    // Reading progress bar
+    window.addEventListener('scroll', () => {
+      const doc = document.documentElement;
+      const scrolled = doc.scrollTop / (doc.scrollHeight - doc.clientHeight);
+      document.getElementById('progress').style.width = (scrolled * 100) + '%';
+    });
+  </script>
+
+</body>
+</html>
